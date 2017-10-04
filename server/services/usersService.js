@@ -1,5 +1,5 @@
-import l from '../../common/logger'
-import User from '../../models/User'
+import l from '../common/logger'
+import User from '../models/User'
 
 class UsersService {
   async all () {
