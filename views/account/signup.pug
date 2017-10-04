@@ -8,7 +8,8 @@ block content
       each error in errors
         li= error.msg
 
-  form(id="loginform" action="/login" method="POST")
+  form(id="signupform" action="/signup" method="POST")
     input(type="email" name="email" id="email" placeholder="Email")
     input(type="password" name="password" id="password" placeholder="Password")
+    input(type="password" name="confirm" id="password" placeholder="Password")
     button(type="submit") Accedi

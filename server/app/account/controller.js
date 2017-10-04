@@ -1,5 +1,5 @@
-import UsersService from '../../services/usersService'
 import passport from 'passport'
+import User from '../../models/User'
 
 export class Controller {
   async loginGet (req, res) {
@@ -13,13 +13,8 @@ export class Controller {
   }
 
   async loginPost (req, res, next) {
-    req.assert('email', 'Email non valida').isEmail()
-    req.assert('email', 'Inserire una Email').notEmpty()
-    req.assert('password', 'Inserire una password').notEmpty()
-    req.sanitize('email').normalizeEmail({
-      remove_dots: false
-    })
-
+    req.check('email').notEmpty().isEmail().withMessage('must be an email').trim().normalizeEmail({remove_dots: false})
+    req.check('password').notEmpty().withMessage('please insert a password')
     const errors = await req.getValidationResult()
 
     if (!errors.isEmpty()) {
@@ -39,19 +34,41 @@ export class Controller {
   }
 
   async signupGet (req, res) {
-    let users = await UsersService.all()
-    res.render('users/index', {
-      title: 'Users',
-      users: users.toJSON()
+    if (req.user) {
+      return res.redirect('/')
+    }
+    res.render('account/signup', {
+      title: 'Signup',
+      errors: req.session.error
     })
   }
 
-  async signupPost (req, res) {
-    let user = await UsersService.byId(req.params.id)
-    res.render('users/show', {
-      title: 'User detail',
-      user: user.toJSON()
+  async signupPost (req, res, next) {
+    req.check('email', 'Email is not valid').isEmail()
+    req.check('email', 'Email cannot be blank').notEmpty()
+    req.check('password', 'Password must be at least 8 characters long').len(8)
+    req.sanitize('email').normalizeEmail({
+      remove_dots: false
     })
+    const errors = await req.getValidationResult()
+    if (!errors.isEmpty()) {
+      req.session.error = errors.array()
+      return res.redirect('/signup')
+    }
+
+    let user = new User({
+      email: req.body.email,
+      password: req.body.password
+    })
+    try {
+      await user.save()
+      req.logIn(user, () => {
+        res.redirect('/')
+      })
+    } catch (err) {
+      console.log(err)
+      res.redirect('/signup')
+    }
   }
 }
 
