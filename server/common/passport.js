@@ -1,7 +1,7 @@
-var passport = require('passport')
-var LocalStrategy = require('passport-local').Strategy
+import passport from 'passport'
+import User from '../models/User'
 
-var User = require('../models/User')
+var LocalStrategy = require('passport-local').Strategy
 
 passport.serializeUser(function (user, done) {
   done(null, user.id)

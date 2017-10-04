@@ -1,6 +1,6 @@
-let crypto = require('crypto')
-let bcrypt = require('bcrypt-nodejs')
-let bookshelf = require('../common/bookshelf')
+import bookshelf from '../common/bookshelf'
+import crypto from 'crypto'
+import bcrypt from 'bcrypt-nodejs'
 
 let User = bookshelf.Model.extend({
   tableName: 'users',

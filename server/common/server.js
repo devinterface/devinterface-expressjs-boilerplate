@@ -5,12 +5,11 @@ import * as http from 'http'
 import * as os from 'os'
 import cookieParser from 'cookie-parser'
 import l from './logger'
-
-const compression = require('compression')
-const expressValidator = require('express-validator')
-var session = require('express-session')
-const passport = require('passport')
-var sassMiddleware = require('node-sass-middleware')
+import compression from 'compression'
+import expressValidator from 'express-validator'
+import session from 'express-session'
+import passport from 'passport'
+import sassMiddleware from 'node-sass-middleware'
 // Passport OAuth strategies
 require('./passport')
 
