@@ -1,7 +1,8 @@
 import * as express from 'express'
 import controller from './controller'
+import auth from '../../middlewares/auth'
 
 export default express
   .Router()
-  .get('/', controller.all)
-  .get('/:id', controller.byId)
+  .get('/', auth.ensureAuthenticated, controller.all)
+  .get('/:id', auth.ensureAuthenticated, controller.byId)
