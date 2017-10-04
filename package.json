@@ -1,0 +1,49 @@
+{
+  "name": "devinterface-expressjs-boilerplate",
+  "version": "1.0.0",
+  "description": "A DevInterface Express.js boilerplate app",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd build && node main",
+    "compile": "node build.js && backpack build",
+    "dev": "node build.js && backpack dev | pino -o 'short'",
+    "debug": "node build.js && backpack dev --inspect | pino -o 'short'",
+    "test": "node build.js && _mocha --compilers js:babel-register",
+    "db:install": "npm run db:migrate && npm run db:seed",
+    "db:migrate": "node_modules/.bin/knex migrate:latest",
+    "db:rollback": "node_modules/.bin/knex migrate:rollback",
+    "db:seed": "node_modules/.bin/knex seed:run"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.2",
+    "bookshelf": "^0.10.4",
+    "compression": "^1.7.1",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "express-session": "^1.15.6",
+    "express-validator": "^4.2.1",
+    "knex": "^0.13.0",
+    "node-sass": "^4.5.3",
+    "node-sass-middleware": "^0.11.0",
+    "nodemailer": "^4.1.2",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.3.0",
+    "pino": "^4.7.1",
+    "pug": "^2.0.0-rc.4",
+    "source-map-support": "^0.4.15"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "babel-preset-env": "^1.6.0",
+    "backpack-core": "^0.4.2",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3",
+    "shelljs": "^0.7.8",
+    "standardjs": "^1.0.0-alpha",
+    "supertest": "^3.0.0"
+  },
+  "author": "Stefano Mancini <stefano.mancini@devinterface.com> (https://www.devinterface.com)"
+}
