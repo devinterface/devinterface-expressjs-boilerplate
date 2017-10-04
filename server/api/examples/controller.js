@@ -1,4 +1,4 @@
-import ExamplesService from '../../services/examples.service'
+import ExamplesService from './service'
 
 export class Controller {
   async all (req, res) {

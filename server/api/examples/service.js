@@ -1,5 +1,5 @@
 import l from '../../common/logger'
-import db from './examples.db.service'
+import db from './repository'
 
 class ExamplesService {
   async all () {
