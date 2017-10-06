@@ -1,8 +1,10 @@
 import passport from 'passport'
 import transporter from '../../common/transporter'
+import l from '../../common/logger'
 import User from '../../models/User'
 import pug from 'pug'
 import crypto from 'crypto-promise'
+import i18n from '../../common/i18n'
 
 export class Controller {
   async loginGet (req, res) {
@@ -10,13 +12,13 @@ export class Controller {
       return res.redirect('/')
     }
     res.render('account/login', {
-      title: 'Log in'
+      title: i18n.__('Login')
     })
   }
 
   async loginPost (req, res, next) {
-    req.check('email').notEmpty().isEmail().withMessage('must be an email').trim().normalizeEmail({remove_dots: false})
-    req.check('password').notEmpty().withMessage('please insert a password')
+    req.check('email').notEmpty().isEmail().withMessage(i18n.__('must be a valid email')).trim().normalizeEmail({remove_dots: false})
+    req.check('password').notEmpty().withMessage(i18n.__('please insert a password'))
     const errors = await req.getValidationResult()
 
     if (!errors.isEmpty()) {
@@ -45,14 +47,14 @@ export class Controller {
       return res.redirect('/')
     }
     res.render('account/signup', {
-      title: 'Signup'
+      title: i18n.__('Signup')
     })
   }
 
   async signupPost (req, res, next) {
-    req.check('email', 'Email is not valid').isEmail()
-    req.check('email', 'Email cannot be blank').notEmpty()
-    req.check('password', 'Password must be at least 8 characters long').len(8)
+    req.check('email', i18n.__('is not valid')).isEmail()
+    req.check('email', i18n.__('cannot be blank')).notEmpty()
+    req.check('password', i18n.__('must be at least 8 characters long')).len(8)
     req.sanitize('email').normalizeEmail({
       remove_dots: false
     })
@@ -72,7 +74,7 @@ export class Controller {
         res.redirect('/')
       })
     } catch (err) {
-      console.log(err)
+      l.error(err)
       res.redirect('/signup')
     }
   }
@@ -85,7 +87,7 @@ export class Controller {
       return res.redirect('/')
     }
     res.render('account/forgot', {
-      title: 'Forgot Password'
+      title: i18n.__('Forgot Password')
     })
   }
 
@@ -93,8 +95,8 @@ export class Controller {
  * POST /forgot
  */
   async forgotPost (req, res, next) {
-    req.check('email', 'Email non valida').isEmail()
-    req.check('email', 'Inserire un\'email').notEmpty()
+    req.check('email', i18n.__('is not valid')).isEmail()
+    req.check('email', i18n.__('cannot be blank')).notEmpty()
     req.sanitize('email').normalizeEmail({
       remove_dots: false
     })
@@ -113,7 +115,7 @@ export class Controller {
 
     if (!user) {
       const error = {
-        msg: 'L\'indirizzo ' + req.body.email + ' non è associato ad alcun account.'
+        msg: i18n.__('Address %s is not associated to any account', req.body.email)
       }
       res.flash('errors', [error])
       return res.redirect('/forgot')
@@ -125,16 +127,17 @@ export class Controller {
     })
     let emailText = pug.renderFile('views/mailer/modify_password.pug', {
       host: req.headers.host,
-      token: token
+      token: token,
+      __: i18n.__
     })
     const mailOptions = {
       to: user.toJSON().email,
       from: process.env.DEFAULT_EMAIL_FROM,
-      subject: 'Reset della password',
+      subject: i18n.__('Password Reset'),
       html: emailText
     }
     transporter.sendMail(mailOptions, () => {
-      const info = 'E\' stata spedita un\'email a ' + user.attributes.email + ' con ulteriori istruzioni.'
+      const info = i18n.__('An email have been sent to given address with further instructions')
       res.flash('info', info)
       res.redirect('/forgot')
     })
@@ -154,13 +157,13 @@ export class Controller {
 
     if (!user) {
       const error = {
-        msg: 'Token scaduto o invalido.'
+        msg: i18n.__('Token invalid')
       }
       res.flash('errors', [error])
       return res.redirect('/forgot')
     }
     res.render('account/reset', {
-      title: 'Password Reset'
+      title: i18n.__('Password Reset')
     })
   }
 
@@ -168,8 +171,8 @@ export class Controller {
  * POST /reset
  */
   async resetPost (req, res, next) {
-    req.check('password', 'Password must be at least 4 characters long').len(4)
-    req.check('confirm', 'Passwords must match').equals(req.body.password)
+    req.check('password', i18n.__('must be at least 8 characters long')).len(8)
+    req.check('confirm', i18n.__('must match with password')).equals(req.body.password)
 
     const errors = await req.getValidationResult()
 
@@ -185,7 +188,7 @@ export class Controller {
 
     if (!user) {
       const error = {
-        msg: 'Token scaduto o invalido.'
+        msg: i18n.__('Token invalid')
       }
       res.flash('errors', [error])
       return res.redirect('back')
@@ -202,17 +205,18 @@ export class Controller {
 
     const userJson = user.toJSON()
     let emailText = pug.renderFile('views/mailer/confirm_modify_password.pug', {
-      email: userJson.email
+      email: userJson.email,
+      __: i18n.__
     })
     const mailOptions = {
       from: process.env.DEFAULT_EMAIL_FROM,
       to: userJson.email,
-      subject: 'Conferma modifica password',
+      subject: i18n.__('Confirm password modification'),
       html: emailText
     }
     transporter.sendMail(mailOptions, () => {
       const info = {
-        msg: 'La tua password è stata modificata con successo!'
+        msg: i18n.__('Yur password has been successfully modified')
       }
       res.flash('info', info)
       res.redirect('/account')

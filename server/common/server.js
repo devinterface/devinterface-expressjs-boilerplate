@@ -11,6 +11,7 @@ import session from 'express-session'
 import passport from 'passport'
 import sassMiddleware from 'node-sass-middleware'
 import flash from 'express-flash-2'
+import i18n from './i18n'
 // Passport OAuth strategies
 require('./passport')
 
@@ -37,6 +38,7 @@ export default class ExpressServer {
     app.use(passport.initialize())
     app.use(passport.session())
     app.use(flash())
+    app.use(i18n.init)
     app.use(function (req, res, next) {
       res.locals.user = req.user ? req.user.toJSON() : null
       next()

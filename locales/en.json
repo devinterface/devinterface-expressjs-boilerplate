@@ -1,0 +1,20 @@
+{
+	"must be a valid email": "must be a valid email",
+	"please insert a password": "please insert a password",
+	"Forgot Password": "Forgot Password",
+	"is not valid": "is not valid",
+	"cannot be blank": "cannot be blank",
+	"An email have been sent to given address with further instructions": "An email have been sent to given address with further instructions",
+	"Password Reset": "Password Reset",
+	"If you don't have requested to change your password, please ignore this email and your password will remain unchanged": "If you don't have requested to change your password, please ignore this email and your password will remain unchanged",
+	"Please click the following link or copy and paste on your browser's address bar to modify your password": "Please click the following link or copy and paste on your browser's address bar to modify your password",
+	"You are receiving this email because you have requested to modify the password for your account": "You are receiving this email because you have requested to modify the password for your account",
+	"Reset password": "Reset password",
+	"must be at least 8 characters long": "must be at least 8 characters long",
+	"must match with password": "must match with password",
+	"Confirm password modification": "Confirm password modification",
+	"Hi": "Hi",
+	"You password have been modified": "You password have been modified",
+	"Yur password has been successfully modified": "Yur password has been successfully modified",
+	"Address %s is not associated to any account": "Address %s is not associated to any account"
+}
