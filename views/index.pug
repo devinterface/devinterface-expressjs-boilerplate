@@ -4,4 +4,5 @@ block content
   h1= title
   p Welcome to #{title}
 
-  a(href="/users") Users
+  if user
+    a(href="/users") Users
