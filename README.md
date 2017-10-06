@@ -5,6 +5,7 @@ A DevInterface Express.js boilerplate app
 ## Install It
 ```
 npm install
+gem install mailcatcher
 ```
 
 ## Run It
@@ -12,6 +13,7 @@ npm install
 
 ```
 npm run dev
+mailcatcher (Go to http://localhost:1080/, Send mail through smtp://localhost:1025)
 ```
 
 #### Run in *production* mode:
@@ -33,8 +35,4 @@ e.g. CloudFoundry
 ```
 cf push devinterface-expressjs-boilerplate
 ```
-
-### Try It
-* Point you're browser to [http://localhost:3000](http://localhost:3000)
-* Invoke the example REST endpoint `curl http://localhost:3000/api/v1/examples`
    

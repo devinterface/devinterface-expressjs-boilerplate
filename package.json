@@ -20,6 +20,7 @@
     "bookshelf": "^0.10.4",
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
+    "crypto-promise": "^2.0.0",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
     "express-session": "^1.15.6",

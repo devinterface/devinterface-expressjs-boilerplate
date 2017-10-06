@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  h1= title
+
+  if errors != undefined
+    ul(class="form-errors")
+      each error in errors
+        li= error.msg
+
+  form(id="resetform" method="POST")
+    input(type="password" name="password" id="password" placeholder="Password")
+    input(type="password" name="confirm" id="confirm" placeholder="Password Confirm")
+    button(type="submit") Modifica Password
