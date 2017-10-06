@@ -1,4 +1,4 @@
-export class Auth {
+export class Authentication {
   async ensureAdmin (req, res, next) {
     if (req.isAuthenticated() && req.user.attributes.role === 0) {
       next()
@@ -24,4 +24,4 @@ export class Auth {
   }
 }
 
-export default new Auth()
+export default new Authentication()
