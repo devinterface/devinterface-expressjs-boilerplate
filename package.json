@@ -18,6 +18,7 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
     "bookshelf": "^0.10.4",
+    "cancan": "^3.0.2",
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
     "crypto-promise": "^2.0.0",
