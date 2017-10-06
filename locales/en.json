@@ -16,5 +16,6 @@
 	"Hi": "Hi",
 	"You password have been modified": "You password have been modified",
 	"Yur password has been successfully modified": "Yur password has been successfully modified",
-	"Address %s is not associated to any account": "Address %s is not associated to any account"
+	"Address %s is not associated to any account": "Address %s is not associated to any account",
+	"Login": "Login"
 }
