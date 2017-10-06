@@ -10,6 +10,7 @@ import expressValidator from 'express-validator'
 import session from 'express-session'
 import passport from 'passport'
 import sassMiddleware from 'node-sass-middleware'
+import flash from 'express-flash-2'
 // Passport OAuth strategies
 require('./passport')
 
@@ -35,6 +36,7 @@ export default class ExpressServer {
     app.use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }))
     app.use(passport.initialize())
     app.use(passport.session())
+    app.use(flash())
     app.use(function (req, res, next) {
       res.locals.user = req.user ? req.user.toJSON() : null
       next()

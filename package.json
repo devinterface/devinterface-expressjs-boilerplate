@@ -23,6 +23,7 @@
     "crypto-promise": "^2.0.0",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
+    "express-flash-2": "^1.0.1",
     "express-session": "^1.15.6",
     "express-validator": "^4.2.1",
     "knex": "^0.13.0",

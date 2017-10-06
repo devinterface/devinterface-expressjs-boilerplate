@@ -3,11 +3,6 @@ extends ../layout
 block content
   h1= title
 
-  if errors != undefined
-    ul(class="form-errors")
-      each error in errors
-        li= error.msg
-
   form(id="loginform" action="/login" method="POST")
     input(type="email" name="email" id="email" placeholder="Email")
     input(type="password" name="password" id="password" placeholder="Password")

@@ -10,8 +10,7 @@ export class Controller {
       return res.redirect('/')
     }
     res.render('account/login', {
-      title: 'Log in',
-      errors: req.session.error
+      title: 'Log in'
     })
   }
 
@@ -21,13 +20,13 @@ export class Controller {
     const errors = await req.getValidationResult()
 
     if (!errors.isEmpty()) {
-      req.session.error = errors.array()
+      res.flash('errors', errors.array())
       return res.redirect('/login')
     }
 
     passport.authenticate('local', (err, user, info) => {
       if (!user) {
-        req.session.error = [info]
+        res.flash('errors', [info])
         return res.redirect('/login')
       }
       req.logIn(user, () => {
@@ -46,8 +45,7 @@ export class Controller {
       return res.redirect('/')
     }
     res.render('account/signup', {
-      title: 'Signup',
-      errors: req.session.error
+      title: 'Signup'
     })
   }
 
@@ -60,7 +58,7 @@ export class Controller {
     })
     const errors = await req.getValidationResult()
     if (!errors.isEmpty()) {
-      req.session.error = errors.array()
+      res.flash('errors', errors.array())
       return res.redirect('/signup')
     }
 
@@ -87,7 +85,6 @@ export class Controller {
       return res.redirect('/')
     }
     res.render('account/forgot', {
-      errors: req.session.error,
       title: 'Forgot Password'
     })
   }
@@ -105,7 +102,7 @@ export class Controller {
     const errors = await req.getValidationResult()
 
     if (!errors.isEmpty()) {
-      req.session.error = errors.array()
+      res.flash('errors', errors.array())
       return res.redirect('/forgot')
     }
     const buf = await crypto.randomBytes(16)
@@ -115,9 +112,10 @@ export class Controller {
     }).fetch()
 
     if (!user) {
-      req.session.error = [{
+      const error = {
         msg: 'L\'indirizzo ' + req.body.email + ' non è associato ad alcun account.'
-      }]
+      }
+      res.flash('errors', [error])
       return res.redirect('/forgot')
     }
     user.set('passwordResetToken', token)
@@ -136,9 +134,8 @@ export class Controller {
       html: emailText
     }
     transporter.sendMail(mailOptions, () => {
-      req.session.error = [{
-        msg: 'E\' stata spedita un\'email a ' + user.attributes.email + ' con ulteriori istruzioni.'
-      }]
+      const info = 'E\' stata spedita un\'email a ' + user.attributes.email + ' con ulteriori istruzioni.'
+      res.flash('info', info)
       res.redirect('/forgot')
     })
   }
@@ -156,13 +153,13 @@ export class Controller {
     await user.where('passwordResetExpires', '>', new Date()).fetch()
 
     if (!user) {
-      req.session.error = [{
+      const error = {
         msg: 'Token scaduto o invalido.'
-      }]
+      }
+      res.flash('errors', [error])
       return res.redirect('/forgot')
     }
     res.render('account/reset', {
-      errors: req.session.error,
       title: 'Password Reset'
     })
   }
@@ -177,7 +174,7 @@ export class Controller {
     const errors = await req.getValidationResult()
 
     if (!errors.isEmpty()) {
-      req.session.error = errors.array()
+      res.flash('errors', errors.array())
       return res.redirect('/reset/' + req.params.token)
     }
 
@@ -187,9 +184,10 @@ export class Controller {
     user = await user.where('passwordResetExpires', '>', new Date()).fetch()
 
     if (!user) {
-      req.session.error = [{
+      const error = {
         msg: 'Token scaduto o invalido.'
-      }]
+      }
+      res.flash('errors', [error])
       return res.redirect('back')
     }
     user.set('password', req.body.password)
@@ -213,9 +211,10 @@ export class Controller {
       html: emailText
     }
     transporter.sendMail(mailOptions, () => {
-      req.session.error = [{
+      const info = {
         msg: 'La tua password è stata modificata con successo!'
-      }]
+      }
+      res.flash('info', info)
       res.redirect('/account')
     })
   }
