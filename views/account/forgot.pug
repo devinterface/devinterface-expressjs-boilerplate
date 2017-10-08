@@ -8,6 +8,6 @@ block content
       each error in errors
         li= error.msg
 
-  form(id="forgotform" action="/forgot" method="POST")
+  form(id="forgotform" method="POST")
     input(type="email" name="email" id="email" placeholder="Email")
     button(type="submit") Reset

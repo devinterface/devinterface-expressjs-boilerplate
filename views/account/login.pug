@@ -3,7 +3,7 @@ extends ../layout
 block content
   h1= title
 
-  form(id="loginform" action="/login" method="POST")
+  form(id="loginform" method="POST")
     input(type="email" name="email" id="email" placeholder="Email")
     input(type="password" name="password" id="password" placeholder="Password")
     button(type="submit") Accedi
