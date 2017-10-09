@@ -5,11 +5,12 @@ import User from '../../models/User'
 import pug from 'pug'
 import crypto from 'crypto-promise'
 import i18n from '../../common/i18n'
+import {url} from '../../common/urlBuilder'
 
 export class Controller {
   async loginGet (req, res) {
     if (req.user) {
-      return res.redirect(`/${req.getLocale()}/`)
+      return res.redirect(url(req, '/'))
     }
     res.render('account/login', {
       title: i18n.__('Login')
@@ -23,28 +24,28 @@ export class Controller {
 
     if (!errors.isEmpty()) {
       res.flash('errors', errors.array())
-      return res.redirect(`/${req.getLocale()}/login`)
+      return res.redirect(url(req, '/login'))
     }
 
     passport.authenticate('local', (err, user, info) => {
       if (!user) {
         res.flash('errors', [info])
-        return res.redirect(`/${req.getLocale()}/login`)
+        return res.redirect(url(req, '/login'))
       }
       req.logIn(user, () => {
-        res.redirect(`/${req.getLocale()}/`)
+        res.redirect(url('/'))
       })
     })(req, res, next)
   }
 
   async logout (req, res) {
     req.logout()
-    res.redirect(`/${req.getLocale()}/`)
+    res.redirect(url('/'))
   }
 
   async signupGet (req, res) {
     if (req.user) {
-      return res.redirect(`/${req.getLocale()}/`)
+      return res.redirect(url(req, '/'))
     }
     res.render('account/signup', {
       title: i18n.__('Signup')
@@ -61,7 +62,7 @@ export class Controller {
     const errors = await req.getValidationResult()
     if (!errors.isEmpty()) {
       res.flash('errors', errors.array())
-      return res.redirect(`/${req.getLocale()}/signup`)
+      return res.redirect(url(req, '/signup'))
     }
 
     let user = new User({
@@ -75,7 +76,7 @@ export class Controller {
       })
     } catch (err) {
       l.error(err)
-      res.redirect(`/${req.getLocale()}/signup`)
+      res.redirect(url(req, '/signup'))
     }
   }
 
@@ -84,7 +85,7 @@ export class Controller {
    */
   async forgotGet (req, res) {
     if (req.isAuthenticated()) {
-      return res.redirect(`/${req.getLocale()}/`)
+      return res.redirect(url(req, '/'))
     }
     res.render('account/forgot', {
       title: i18n.__('Forgot Password')
@@ -105,7 +106,7 @@ export class Controller {
 
     if (!errors.isEmpty()) {
       res.flash('errors', errors.array())
-      return res.redirect(`/${req.getLocale()}/forgot`)
+      return res.redirect(url(req, '/forgot'))
     }
     const buf = await crypto.randomBytes(16)
     const token = buf.toString('hex')
@@ -118,7 +119,7 @@ export class Controller {
         msg: i18n.__('Address %s is not associated to any account', req.body.email)
       }
       res.flash('errors', [error])
-      return res.redirect(`/${req.getLocale()}/forgot`)
+      return res.redirect(url(req, '/forgot'))
     }
     user.set('passwordResetToken', token)
     user.set('passwordResetExpires', new Date(Date.now() + 3600000)) // expire in 1 hour
@@ -139,7 +140,7 @@ export class Controller {
     transporter.sendMail(mailOptions, () => {
       const info = i18n.__('An email have been sent to given address with further instructions')
       res.flash('info', info)
-      res.redirect(`/${req.getLocale()}/forgot`)
+      res.redirect(url(req, '/forgot'))
     })
   }
 
@@ -148,7 +149,7 @@ export class Controller {
  */
   async resetGet (req, res) {
     if (req.isAuthenticated()) {
-      return res.redirect(`/${req.getLocale()}/`)
+      return res.redirect(url(req, '/'))
     }
     let user = new User({
       passwordResetToken: req.params.token
@@ -160,7 +161,7 @@ export class Controller {
         msg: i18n.__('Token invalid')
       }
       res.flash('errors', [error])
-      return res.redirect(`/${req.getLocale()}/forgot`)
+      return res.redirect(url(req, '/forgot'))
     }
     res.render('account/reset', {
       title: i18n.__('Password Reset')
@@ -178,7 +179,7 @@ export class Controller {
 
     if (!errors.isEmpty()) {
       res.flash('errors', errors.array())
-      return res.redirect(`/${req.getLocale()}/reset/${req.params.token}`)
+      return res.redirect(url(req, `/reset/${req.params.token}`))
     }
 
     let user = new User({
@@ -219,7 +220,7 @@ export class Controller {
         msg: i18n.__('Yur password has been successfully modified')
       }
       res.flash('info', info)
-      res.redirect(`/${req.getLocale()}/accout`)
+      res.redirect(url(req, '/account'))
     })
   }
 }
