@@ -33,14 +33,14 @@ export class Controller {
         return res.redirect(url(req, '/login'))
       }
       req.logIn(user, () => {
-        res.redirect(url('/'))
+        res.redirect(url(req, '/'))
       })
     })(req, res, next)
   }
 
   async logout (req, res) {
     req.logout()
-    res.redirect(url('/'))
+    res.redirect(url(req, '/'))
   }
 
   async signupGet (req, res) {
@@ -129,6 +129,7 @@ export class Controller {
     let emailText = pug.renderFile('views/mailer/modify_password.pug', {
       host: req.headers.host,
       token: token,
+      locale: req.getLocale(),
       __: i18n.__
     })
     const mailOptions = {
