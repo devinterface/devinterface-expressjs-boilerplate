@@ -12,6 +12,7 @@ import passport from 'passport'
 import sassMiddleware from 'node-sass-middleware'
 import flash from 'express-flash-2'
 import i18n from './i18n'
+import {url} from './urlBuilder'
 // Passport OAuth strategies
 require('./passport')
 
@@ -41,6 +42,7 @@ export default class ExpressServer {
     app.use(i18n.init)
     app.use(function (req, res, next) {
       res.locals.user = req.user ? req.user.toJSON() : null
+      res.locals.url = url
       next()
     })
     app.use(Express.static(`${root}/public`))

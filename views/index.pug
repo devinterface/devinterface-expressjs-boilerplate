@@ -5,4 +5,4 @@ block content
   p #{__('Welcome to')} #{title}
 
   if user
-    a(href=`/${locale}/users`) Users
+    a(href=`${url(locale, '/users')}`) Users
