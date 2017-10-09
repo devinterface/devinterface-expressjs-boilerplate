@@ -30,7 +30,7 @@ export class Controller {
     await user.save(user.changed, {
       patch: true
     })
-    req.flash('success', {
+    res.flash('info', {
       msg: i18n.__('Your account has been unlinked.')
     })
     res.redirect(url(req, '/'))
