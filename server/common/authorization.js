@@ -5,7 +5,7 @@ const {allow} = cancan
 
 // allow(User, 'create', Page, (user, page) => user.attributes.role === 0)
 // allow(User, 'edit', Page, (user, page) => user.attributes.role === 0)
-// allow(User, 'show', Page, (user, page) => user.attributes.role === 0)
+allow(User, 'show', User, (user, userToShow) => user.id === userToShow.id)
 
 // allow(User, 'create', Organization, (user, organization) => user.attributes.role === 0)
 // allow(User, 'show', Organization, (user, organization) => user.attributes.role === 0)
