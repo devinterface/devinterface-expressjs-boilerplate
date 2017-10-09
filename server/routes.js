@@ -18,4 +18,5 @@ export default function routes (app) {
   app.use('/:lang/', I18n.setLocale, publicAppRouter)
   app.use('/:lang/', I18n.setLocale, accountAppRouter)
   app.use('/:lang/users', I18n.setLocale, usersAppRouter)
+  app.use('/', I18n.setLocale, publicAppRouter)
 }
