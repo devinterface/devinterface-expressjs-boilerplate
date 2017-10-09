@@ -1,9 +1,11 @@
+import {url} from '../common/urlBuilder'
+
 export class Authentication {
   async ensureAdmin (req, res, next) {
     if (req.isAuthenticated() && req.user.attributes.role === 0) {
       next()
     } else {
-      res.redirect('/login')
+      res.redirect(url(req, '/login'))
     }
   }
 
@@ -11,7 +13,7 @@ export class Authentication {
     if (req.isAuthenticated()) {
       next()
     } else {
-      res.redirect('/login')
+      res.redirect(url(req, '/login'))
     }
   }
 
