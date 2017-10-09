@@ -6,6 +6,7 @@ import usersApiRouter from './api/users/router'
 import publicAppRouter from './app/public/router'
 import accountAppRouter from './app/account/router'
 import usersAppRouter from './app/users/router'
+import oauthAppRouter from './app/oauth/router'
 
 import I18n from './middlewares/i18n'
 
@@ -15,6 +16,7 @@ export default function routes (app) {
   app.use('/api/v1/users', usersApiRouter)
 
   // APP ROUTES
+  app.use('/auth', oauthAppRouter)
   app.use('/:lang/', I18n.setLocale, publicAppRouter)
   app.use('/:lang/', I18n.setLocale, accountAppRouter)
   app.use('/:lang/users', I18n.setLocale, usersAppRouter)
