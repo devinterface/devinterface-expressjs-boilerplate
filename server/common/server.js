@@ -41,7 +41,6 @@ export default class ExpressServer {
     app.use(i18n.init)
     app.use(function (req, res, next) {
       res.locals.user = req.user ? req.user.toJSON() : null
-      res.locals.pippo = 'pippoz'
       next()
     })
     app.use(Express.static(`${root}/public`))
