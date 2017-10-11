@@ -10,4 +10,6 @@ html
           p #{error.param} #{error.msg}
       if flash.info
         p #{flash.info}
+      if flash.success
+        p #{flash.success}
     block content
