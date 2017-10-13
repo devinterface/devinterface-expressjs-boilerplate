@@ -6,7 +6,6 @@ exports.up = function (knex, Promise) {
     table.string('website')
     table.string('picture')
     table.string('facebook')
-    table.string('vk')
   })
 }
 
