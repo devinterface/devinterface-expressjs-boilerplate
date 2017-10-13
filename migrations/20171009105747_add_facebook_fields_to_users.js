@@ -18,6 +18,5 @@ exports.down = function (knex, Promise) {
     table.dropColumn('website')
     table.dropColumn('picture')
     table.dropColumn('facebook')
-    table.dropColumn('vk')
   })
 }
