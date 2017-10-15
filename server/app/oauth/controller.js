@@ -4,10 +4,7 @@ import {url} from '../../common/urlBuilder'
 
 export class Controller {
   async unlink (req, res, next) {
-    let user = new User({
-      id: req.user.id
-    })
-    await user.fetch()
+    const user = await User.findById(req.user.id)
     switch (req.params.provider) {
       case 'facebook':
         user.set('facebook', null)
@@ -27,9 +24,7 @@ export class Controller {
         })
         return url(req, '/')
     }
-    await user.save(user.changed, {
-      patch: true
-    })
+    await user.save()
     res.flash('info', {
       msg: i18n.__('Your account has been unlinked.')
     })

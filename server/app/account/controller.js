@@ -6,6 +6,7 @@ import pug from 'pug'
 import crypto from 'crypto-promise'
 import i18n from '../../common/i18n'
 import {url} from '../../common/urlBuilder'
+import Sequelize from 'sequelize'
 
 export class Controller {
   async loginGet (req, res) {
@@ -110,10 +111,7 @@ export class Controller {
     }
     const buf = await crypto.randomBytes(16)
     const token = buf.toString('hex')
-    let user = await new User({
-      email: req.body.email
-    }).fetch()
-
+    let user = await User.findOne({ where: {email: req.body.email} })
     if (!user) {
       const error = {
         msg: i18n.__('Address %s is not associated to any account', req.body.email)
@@ -123,9 +121,7 @@ export class Controller {
     }
     user.set('passwordResetToken', token)
     user.set('passwordResetExpires', new Date(Date.now() + 3600000)) // expire in 1 hour
-    await user.save(user.changed, {
-      patch: true
-    })
+    await user.save()
     let emailText = pug.renderFile('views/mailer/modify_password.pug', {
       host: req.headers.host,
       token: token,
@@ -152,11 +148,12 @@ export class Controller {
     if (req.isAuthenticated()) {
       return res.redirect(url(req, '/'))
     }
-    let user = new User({
-      passwordResetToken: req.params.token
-    })
-    await user.where('passwordResetExpires', '>', new Date()).fetch()
-
+    const Op = Sequelize.Op
+    let user = await User.findOne({ where: {passwordResetToken: req.params.token,
+      passwordResetExpires: {
+        [Op.gt]: new Date()
+      }
+    }})
     if (!user) {
       const error = {
         msg: i18n.__('Token invalid')
@@ -183,10 +180,12 @@ export class Controller {
       return res.redirect(url(req, `/reset/${req.params.token}`))
     }
 
-    let user = new User({
-      passwordResetToken: req.params.token
-    })
-    user = await user.where('passwordResetExpires', '>', new Date()).fetch()
+    const Op = Sequelize.Op
+    let user = await User.findOne({ where: {passwordResetToken: req.params.token,
+      passwordResetExpires: {
+        [Op.gt]: new Date()
+      }
+    }})
 
     if (!user) {
       const error = {
@@ -198,9 +197,7 @@ export class Controller {
     user.set('password', req.body.password)
     user.set('passwordResetToken', null)
     user.set('passwordResetExpires', null)
-    await user.save(user.changed, {
-      patch: true
-    })
+    await user.save()
     await req.logIn(user, () => {
       Promise.resolve(user)
     })

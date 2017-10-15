@@ -4,17 +4,13 @@ import User from '../models/User'
 class UsersService {
   async all () {
     l.info(`${this.constructor.name}.all()`)
-    let users = await User.query((qb) => {
-      qb.orderBy('created_at', 'DESC')
-    }).fetchAll()
+    let users = await User.findAll({})
     return users
   }
 
   async byId (id) {
     l.info(`${this.constructor.name}.byId(${id})`)
-    let user = await new User({
-      id: id
-    }).fetch()
+    let user = await User.findById(id)
     return user
   }
 }

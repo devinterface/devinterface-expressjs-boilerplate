@@ -10,15 +10,14 @@
     "debug": "node build.dev.js && backpack dev --inspect | pino -o 'short'",
     "test": "node build.dev.js && _mocha --compilers js:babel-register",
     "db:install": "npm run db:migrate && npm run db:seed",
-    "db:migrate": "node_modules/.bin/knex migrate:latest",
-    "db:rollback": "node_modules/.bin/knex migrate:rollback",
-    "db:seed": "node_modules/.bin/knex seed:run",
+    "db:migrate": "node_modules/.bin/sequelize db:migrate",
+    "db:rollback": "node_modules/.bin/sequelize db:migrate:undo",
+    "db:seed": "node_modules/.bin/sequelize db:seed:all",
     "linter": "standard --fix"
   },
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
-    "bookshelf": "^0.10.4",
     "cancan": "^3.0.2",
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
@@ -29,7 +28,6 @@
     "express-session": "^1.15.6",
     "express-validator": "^4.2.1",
     "i18n": "^0.8.3",
-    "knex": "^0.13.0",
     "node-sass": "^4.5.3",
     "node-sass-middleware": "^0.11.0",
     "nodemailer": "^4.1.2",
@@ -37,8 +35,10 @@
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
     "pg": "^7.3.0",
+    "pg-hstore": "^2.3.2",
     "pino": "^4.7.1",
     "pug": "^2.0.0-rc.4",
+    "sequelize": "^4.13.10",
     "source-map-support": "^0.4.15"
   },
   "devDependencies": {
@@ -47,6 +47,7 @@
     "backpack-core": "^0.4.2",
     "chai": "^4.1.2",
     "mocha": "^3.5.3",
+    "sequelize-cli": "^3.0.0",
     "shelljs": "^0.7.8",
     "standardjs": "^1.0.0-alpha",
     "supertest": "^3.0.0"

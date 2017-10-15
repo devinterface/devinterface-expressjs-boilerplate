@@ -8,28 +8,27 @@ passport.serializeUser(function (user, done) {
   done(null, user.id)
 })
 passport.deserializeUser(function (id, done) {
-  new User({ id: id}).fetch().then(function (user) {
+  User.findById(id).then(function (user) {
     done(null, user)
   })
 })
 
 // Sign in with Email and Password
 passport.use(new LocalStrategy({ usernameField: 'email' }, function (email, password, done) {
-  new User({ email: email })
-    .fetch()
+  User.findOne({ where: {email: email} })
     .then(function (user) {
       if (!user) {
         return done(null, false, { msg: 'The email address ' + email + ' is not associated with any account. ' +
         'Double-check your email address and try again.' })
       }
-      user.comparePassword(password, function (err, isMatch) {
-        if (!isMatch) {
-          return done(null, false, { msg: 'Invalid email or password' })
-        }
-        return done(null, user)
-      })
+      const isMatch = user.authenticate(password)
+      if (!isMatch) {
+        return done(null, false, { msg: 'Invalid email or password' })
+      }
+      return done(null, user)
     })
-}))
+})
+)
 
 // Sign in with Facebook
 passport.use(new FacebookStrategy({
@@ -40,15 +39,13 @@ passport.use(new FacebookStrategy({
   passReqToCallback: true
 }, function (req, accessToken, refreshToken, profile, done) {
   if (req.user) {
-    new User({ facebook: profile.id })
-      .fetch()
+    User.findOne({ where: {facebook: profile.id} })
       .then(function (user) {
         if (user) {
           req.flash('error', { msg: 'There is already an existing account linked with Facebook that belongs to you.' })
           return done(null)
         }
-        new User({ id: req.user.id })
-          .fetch()
+        User.findById(req.user.id)
           .then(function (user) {
             user.set('name', user.get('name') || profile.name.givenName + ' ' + profile.name.familyName)
             user.set('gender', user.get('gender') || profile._json.gender)
@@ -61,14 +58,12 @@ passport.use(new FacebookStrategy({
           })
       })
   } else {
-    new User({ facebook: profile.id })
-      .fetch()
+    User.findOne({ where: {facebook: profile.id} })
       .then(function (user) {
         if (user) {
           return done(null, user)
         }
-        new User({ email: profile._json.email })
-          .fetch()
+        User.findOne({ where: {email: profile._json.email} })
           .then(function (user) {
             if (user) {
               req.flash('error', { msg: user.get('email') + ' is already associated with another account.' })

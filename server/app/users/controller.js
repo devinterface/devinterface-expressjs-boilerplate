@@ -7,7 +7,7 @@ export class Controller {
     let users = await UsersService.all()
     res.render('users/index', {
       title: 'Users',
-      users: users.toJSON()
+      users: users
     })
   }
 
@@ -20,7 +20,7 @@ export class Controller {
     }
     res.render('users/show', {
       title: 'User detail',
-      user: user.toJSON()
+      user: user
     })
   }
 }

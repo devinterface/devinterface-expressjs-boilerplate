@@ -1,51 +1,75 @@
-import bookshelf from '../common/bookshelf'
-import crypto from 'crypto'
-import bcrypt from 'bcrypt-nodejs'
+import {Sequelize, DataTypes} from 'sequelize'
+import sequelize from '../common/sequelize'
+import bcrypt from 'bcrypt'
 
-let User = bookshelf.Model.extend({
-  tableName: 'users',
-  hasTimestamps: true,
-
-  initialize: function () {
-    this.on('saving', this.hashPassword, this)
+const User = sequelize.define('users', {
+  id: {
+    primaryKey: true,
+    type: Sequelize.UUID,
+    defaultValue: DataTypes.UUIDV4
   },
-
-  hashPassword: function (model, attrs, options) {
-    let password = options.patch ? attrs.password : model.get('password')
-    if (!password) {
-      return
-    }
-    return new Promise((resolve, reject) => {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, null, (err, hash) => {
-          if (options.patch) {
-            attrs.password = hash
-          }
-          model.set('password', hash)
-          resolve()
-        })
-      })
-    })
+  role: {
+    type: Sequelize.ENUM,
+    values: ['user', 'admin'],
+    defaultValue: 'user'
   },
-
-  comparePassword: function (password, done) {
-    let model = this
-    bcrypt.compare(password, model.get('password'), (err, isMatch) => {
-      done(err, isMatch)
-    })
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {isEmail: true}
   },
-
-  hidden: ['password', 'passwordResetToken', 'passwordResetExpires'],
-
-  virtuals: {
-    gravatar: function () {
-      if (!this.get('email')) {
-        return 'https://gravatar.com/avatar/?s=200&d=retro'
-      }
-      let md5 = crypto.createHash('md5').update(this.get('email')).digest('hex')
-      return 'https://gravatar.com/avatar/' + md5 + '?s=200&d=retro'
-    }
+  passwordDigest: {
+    type: Sequelize.STRING
+  },
+  password: {
+    type: Sequelize.VIRTUAL
+  },
+  password_confirmation: {
+    type: Sequelize.VIRTUAL
+  },
+  passwordResetToken: {
+    type: Sequelize.STRING
+  },
+  passwordResetExpires: {
+    type: Sequelize.DATE
+  },
+  name: {
+    type: Sequelize.STRING
+  },
+  gender: {
+    type: Sequelize.STRING
+  },
+  location: {
+    type: Sequelize.STRING
+  },
+  website: {
+    type: Sequelize.STRING
+  },
+  picture: {
+    type: Sequelize.STRING
+  },
+  facebook: {
+    type: Sequelize.STRING
   }
+},
+  {
+    indexes: [{unique: true, fields: ['email']}]
+  }
+)
+const hasSecurePassword = async (user) => {
+  if (user.password) {
+    const hash = await bcrypt.hash(user.password, 10)
+    user.set('passwordDigest', hash)
+  } else { }
+}
+
+User.prototype.authenticate = function (value) {
+  return bcrypt.compareSync(value, this.passwordDigest)
+}
+
+User.beforeSave(async user => {
+  user.email = user.email.toLowerCase()
+  await hasSecurePassword(user)
 })
 
 module.exports = User
