@@ -42,7 +42,7 @@ passport.use(new FacebookStrategy({
     User.findOne({ where: {facebook: profile.id} })
       .then(function (user) {
         if (user) {
-          req.flash('error', { msg: 'There is already an existing account linked with Facebook that belongs to you.' })
+          req.res.flash('errors', [{ msg: 'There is already an existing account linked with Facebook that belongs to you.' }])
           return done(null)
         }
         User.findById(req.user.id)
@@ -52,7 +52,7 @@ passport.use(new FacebookStrategy({
             user.set('picture', user.get('picture') || 'https://graph.facebook.com/' + profile.id + '/picture?type=large')
             user.set('facebook', profile.id)
             user.save(user.changed, { patch: true }).then(function () {
-              req.flash('success', { msg: 'Your Facebook account has been linked.' })
+              req.res.flash('success', 'Your Facebook account has been linked.')
               done(null, user)
             })
           })
@@ -66,7 +66,7 @@ passport.use(new FacebookStrategy({
         User.findOne({ where: {email: profile._json.email} })
           .then(function (user) {
             if (user) {
-              req.flash('error', { msg: user.get('email') + ' is already associated with another account.' })
+              req.res.flash('errors', [{ msg: user.get('email') + ' is already associated with another account.' }])
               return done()
             }
             user = new User()
