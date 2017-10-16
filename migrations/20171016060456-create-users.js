@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('users', {
       id: {
         primaryKey: true,
         type: Sequelize.UUID,
@@ -29,6 +29,7 @@ module.exports = {
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE
     })
+    await queryInterface.addIndex('users', {unique: true, fields: ['email']})
   },
 
   down: (queryInterface, Sequelize) => {
