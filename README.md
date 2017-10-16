@@ -2,7 +2,9 @@
 
 A DevInterface Express.js boilerplate app.
 
-This boilerplate sets up a starter application with built in authorization, authentication (email, Facebook, password forget) and internationalization. 
+This boilerplate sets up a starter application with built in authorization, authentication (email, Facebook, password forget) and internationalization.
+
+`master` branch is based on [`Bookshelf`](http://bookshelfjs.org/) ORM. Please check out the `sequelize` branch to see the same boilerplate with [`Sequelize`](http://docs.sequelizejs.com/) ORM
 
 ## Install It
 Setup a PostgreSQL 9.6 database with following extensions:
