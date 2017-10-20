@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false
       },
       passwordDigest: Sequelize.STRING,
-      passwordResetToken: Sequelize.DATE,
+      passwordResetToken: Sequelize.STRING,
       passwordResetExpires: Sequelize.DATE,
       name: Sequelize.STRING,
       gender: Sequelize.STRING,
