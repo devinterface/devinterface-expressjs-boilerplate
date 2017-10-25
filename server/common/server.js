@@ -35,6 +35,7 @@ export default class ExpressServer {
       indentedSyntax: true, // true = .sass and false = .scss
       sourceMap: true
     }))
+    app.use(Express.static(`${root}/public`))
     app.use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }))
     app.use(passport.initialize())
     app.use(passport.session())
@@ -45,7 +46,6 @@ export default class ExpressServer {
       res.locals.url = url
       next()
     })
-    app.use(Express.static(`${root}/public`))
   }
 
   router (routes) {
