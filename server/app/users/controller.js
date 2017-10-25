@@ -2,7 +2,7 @@ import UsersService from '../../services/usersService'
 import cancan from '../../common/authorization'
 import {url} from '../../common/urlBuilder'
 
-export class Controller {
+class Controller {
   async all (req, res) {
     let users = await UsersService.all()
     res.render('users/index', {

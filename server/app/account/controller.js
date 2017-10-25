@@ -8,7 +8,7 @@ import i18n from '../../common/i18n'
 import {url} from '../../common/urlBuilder'
 import Sequelize from 'sequelize'
 
-export class Controller {
+class Controller {
   async loginGet (req, res) {
     if (req.user) {
       return res.redirect(url(req, '/'))
