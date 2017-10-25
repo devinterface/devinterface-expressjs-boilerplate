@@ -2,7 +2,7 @@ import User from '../../models/User'
 import i18n from '../../common/i18n'
 import {url} from '../../common/urlBuilder'
 
-export class Controller {
+class Controller {
   async unlink (req, res, next) {
     let user = new User({
       id: req.user.id

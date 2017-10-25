@@ -1,6 +1,6 @@
 import UsersService from '../../services/usersService'
 
-export class Controller {
+class Controller {
   async all (req, res) {
     let users = await UsersService.all()
     res.json(users)

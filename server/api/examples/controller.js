@@ -1,6 +1,6 @@
 import ExamplesService from './service'
 
-export class Controller {
+class Controller {
   async all (req, res) {
     let r = await ExamplesService.all()
     res.json(r)
