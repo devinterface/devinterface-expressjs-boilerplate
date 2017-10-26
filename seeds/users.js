@@ -1,14 +1,12 @@
 
-const User = require('../server/models/User')
-exports.seed = (knex, Promise) => {
+exports.seed = async (knex, Promise) => {
   // Deletes ALL existing entries
-  return knex('users').del()
-    .then(async() => {
-      let user = new User({
-        email: 'info@devinterface.com',
-        password: 'password',
-        role: 0
-      })
-      await user.save()
-    })
+  await knex('users').del()
+  await knex('users').insert({
+    email: 'info@devinterface.com',
+    password: '$2a$10$pdbvH.ReqZ6LakV0H8E6FOANr7Sxqw1C0P2emDlU0th5P2Rn88m7G', // password,
+    role: 0,
+    created_at: new Date(),
+    updated_at: new Date()
+  })
 }
