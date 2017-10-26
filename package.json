@@ -1,7 +1,7 @@
 {
   "name": "devinterface-expressjs-boilerplate",
   "version": "1.0.0",
-  "description": "A DevInterface Express.js boilerplate app",
+  "description": "The DevInterface Express.js boilerplate app",
   "main": "index.js",
   "scripts": {
     "start": "cd build && node main",
@@ -52,5 +52,6 @@
     "standardjs": "^1.0.0-alpha",
     "supertest": "^3.0.0"
   },
+  "license": "ISC",
   "author": "Stefano Mancini <stefano.mancini@devinterface.com> (https://www.devinterface.com)"
 }
